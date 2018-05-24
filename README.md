@@ -1,2 +1,2 @@
 # cuckoo
-spring+springmvc+mybatis
+springboot+mybatis
