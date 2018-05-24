@@ -30,7 +30,7 @@ public class UserController {
 
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    public User getUserById(int id) {
+    public User getUserById(Integer id) {
         User user = userMapper.getUserById(id);
         return user;
     }
