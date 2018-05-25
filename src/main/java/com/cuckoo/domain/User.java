@@ -9,6 +9,12 @@ public class User {
     private String name;
     private String password;
 
+    public User(String phone, String name, String password) {
+        this.phone = phone;
+        this.name = name;
+        this.password = password;
+    }
+
     public Integer getId() {
         return id;
     }
