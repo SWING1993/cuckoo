@@ -4,18 +4,21 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
     public static final String DEFAULT_ERROR_VIEW = "error";
 
     @ExceptionHandler(value = java.lang.Exception.class)
-    public ModelAndView defaultErrorHandler(HttpServletRequest req, Exception e) {
-        ModelAndView mav = new ModelAndView();
-        mav.addObject("exception",e);
-        mav.addObject("url",req.getRequestURI());
-        mav.setViewName(DEFAULT_ERROR_VIEW);
-        return mav;
+    public Object defaultErrorHandler(HttpServletRequest req, Exception e) {
+        Map<String, Object > map = new HashMap<String, Object>();
+        map.put("exception",e);
+        map.put("url",req.getRequestURI());
+        System.out.println(map);
+        return map;
     }
 
 }

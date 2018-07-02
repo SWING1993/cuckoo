@@ -1,6 +1,5 @@
 package com.cuckoo.service;
 
-
 import com.cuckoo.domain.User;
 import com.cuckoo.domain.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,10 +51,5 @@ public class UserController {
         User user = userMapper.getUserById(id);
         return user;
     }
-
-
-
-
-
 
 }
