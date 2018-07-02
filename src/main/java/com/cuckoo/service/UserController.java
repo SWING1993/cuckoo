@@ -18,7 +18,8 @@ public class UserController {
     private UserMapper userMapper;
 
 
-    @RequestMapping(value= "/", method=RequestMethod.POST)
+    // 增
+    @RequestMapping(value= "/add", method=RequestMethod.POST)
     public String addUser(@ModelAttribute User user) {
         System.out.println(user);
         userMapper.addUser(user);
@@ -26,6 +27,7 @@ public class UserController {
     }
 
 
+    // 删
     @RequestMapping(value= "/{id}", method=RequestMethod.DELETE)
     public String deleteUserById(@PathVariable Integer id) {
         // 处理"/users/{id}"的DELETE请求，用来删除User
@@ -33,13 +35,17 @@ public class UserController {
         return "success";
     }
 
-    @RequestMapping(value = "/", method = RequestMethod.GET)
+
+    // 查询全部
+    @RequestMapping(value = "/getAll", method = RequestMethod.GET)
     public List<User> getUserList() {
         List<User> r = userMapper.getAllUsers();
+        System.out.println(r);
         return r;
     }
 
 
+    //根据id查询用户
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public User getUserById(@PathVariable Integer id) {
         System.out.println(id);
