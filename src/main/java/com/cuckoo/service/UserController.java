@@ -2,6 +2,7 @@ package com.cuckoo.service;
 
 import com.cuckoo.domain.User;
 import com.cuckoo.domain.UserMapper;
+import com.cuckoo.utils.ResultModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -10,7 +11,6 @@ import java.util.*;
 @RestController
 @RequestMapping(value="/user")
 public class UserController {
-
     static Map<Long, User> users= Collections.synchronizedMap(new HashMap<Long, User>());
 
     @Autowired
@@ -19,29 +19,44 @@ public class UserController {
     // 注册用户
     @RequestMapping(value= "/register", method=RequestMethod.POST)
     public Object addUser(@ModelAttribute User user) {
-        Map<String, String > resultMap = new HashMap<String, String>();
-        if (user.getName().isEmpty() || user.getPassword().isEmpty() || user.getPhone().isEmpty()) {
-            resultMap.put("code","1000");
-            resultMap.put("message","用户名,密码.手机号不能为空");
-            return resultMap;
-        }
-        resultMap.put("code","1000");
-        resultMap.put("message","添加成功");
-        userMapper.addUser(user);
-        return resultMap;
-    }
+        ResultModel resultModel = new ResultModel();
+        resultModel.setUrl("/user/register");
 
+        if (user.getName().isEmpty() || user.getPassword().isEmpty() || user.getPhone().isEmpty()) {
+            resultModel.setMessage("用户名,密码.手机号不能为空");
+            resultModel.setCode(1001);
+        } else {
+            if (user.getPhone().length() != 11) {
+                resultModel.setMessage("请填写正确的手机号");
+                resultModel.setCode(1001);
+            } else if (user.getPassword().length() < 6) {
+                resultModel.setMessage("密码最小六位");
+                resultModel.setCode(1001);
+            } else {
+                userMapper.addUser(user);
+                resultModel.setCode(1000);
+                resultModel.setMessage("注册成功");
+            }
+        }
+        return resultModel;
+    }
 
     // 注销用户
     @RequestMapping(value= "/delete", method=RequestMethod.POST)
     public Object deleteUserById(@RequestParam HashMap requestMap) {
         System.out.println("注销用户" +requestMap);
+        ResultModel resultModel = new ResultModel();
+        resultModel.setUrl("/user/delete");
         Integer id = Integer.parseInt(requestMap.get("id").toString());
+        if (id == 0) {
+            resultModel.setCode(1001);
+            resultModel.setMessage("id不能为空");
+            return resultModel;
+        }
         userMapper.deleteUserById(id);
-        Map<String, String > resultMap = new HashMap<String, String>();
-        resultMap.put("code","1000");
-        resultMap.put("message","注销成功");
-        return resultMap;
+        resultModel.setCode(1000);
+        resultModel.setMessage("处理成功");
+        return resultModel;
     }
 
 

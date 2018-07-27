@@ -22,6 +22,7 @@ public interface UserMapper {
     @Select("SELECT * FROM users WHERE id = #{id}")
     User getUserById(Integer id);
 
-
+    @Select("SELECT * FROM users WHERE phone = #{phone}")
+    User getUserByPhone(String phone);
 
 }
