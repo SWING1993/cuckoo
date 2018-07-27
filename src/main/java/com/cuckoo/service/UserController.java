@@ -2,6 +2,7 @@ package com.cuckoo.service;
 
 import com.cuckoo.domain.User;
 import com.cuckoo.domain.UserMapper;
+import com.cuckoo.utils.MD5Str;
 import com.cuckoo.utils.ResultModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -33,6 +34,7 @@ public class UserController {
                 resultModel.setMessage("密码最小六位");
                 resultModel.setCode(1001);
             } else {
+                user.setPassword(MD5Str.getMD5(user.getPassword()));
                 userMapper.addUser(user);
                 resultModel.setCode(1000);
                 resultModel.setMessage("注册成功");
