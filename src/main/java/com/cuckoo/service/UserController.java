@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.*;
 
 @RestController
-@RequestMapping(value="/users")
+@RequestMapping(value="/user")
 public class UserController {
 
     static Map<Long, User> users= Collections.synchronizedMap(new HashMap<Long, User>());
@@ -16,22 +16,32 @@ public class UserController {
     @Autowired
     private UserMapper userMapper;
 
-
-    // 增
-    @RequestMapping(value= "/add", method=RequestMethod.POST)
-    public String addUser(@ModelAttribute User user) {
-        System.out.println(user);
+    // 注册用户
+    @RequestMapping(value= "/register", method=RequestMethod.POST)
+    public Object addUser(@ModelAttribute User user) {
+        Map<String, String > resultMap = new HashMap<String, String>();
+        if (user.getName().isEmpty() || user.getPassword().isEmpty() || user.getPhone().isEmpty()) {
+            resultMap.put("code","1000");
+            resultMap.put("message","用户名,密码.手机号不能为空");
+            return resultMap;
+        }
+        resultMap.put("code","1000");
+        resultMap.put("message","添加成功");
         userMapper.addUser(user);
-        return "success";
+        return resultMap;
     }
 
 
-    // 删
-    @RequestMapping(value= "/{id}", method=RequestMethod.DELETE)
-    public String deleteUserById(@PathVariable Integer id) {
-        // 处理"/users/{id}"的DELETE请求，用来删除User
+    // 注销用户
+    @RequestMapping(value= "/delete", method=RequestMethod.POST)
+    public Object deleteUserById(@RequestParam HashMap requestMap) {
+        System.out.println("注销用户" +requestMap);
+        Integer id = Integer.parseInt(requestMap.get("id").toString());
         userMapper.deleteUserById(id);
-        return "success";
+        Map<String, String > resultMap = new HashMap<String, String>();
+        resultMap.put("code","1000");
+        resultMap.put("message","注销成功");
+        return resultMap;
     }
 
 
