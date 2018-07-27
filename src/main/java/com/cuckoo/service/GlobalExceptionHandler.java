@@ -1,4 +1,5 @@
 package com.cuckoo.service;
+import com.cuckoo.utils.ResultModel;
 import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -14,11 +15,10 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(value = java.lang.Exception.class)
     public Object defaultErrorHandler(HttpServletRequest req, Exception e) {
-        Map<String, Object > map = new HashMap<String, Object>();
-        map.put("exception",e);
-        map.put("url",req.getRequestURI());
-        System.out.println(map);
-        return map;
+        ResultModel resultModel = new ResultModel();
+        resultModel.setUrl(req.getRequestURI());
+        resultModel.setException(e);
+        return resultModel;
     }
 
 }

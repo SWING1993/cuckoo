@@ -16,6 +16,8 @@ public class ResultModel {
 
     String timestamp;
 
+    Exception exception;
+
     public void setCode(Integer code) {
         this.code = code;
     }
@@ -54,6 +56,14 @@ public class ResultModel {
         dateFormat.setTimeZone(TimeZone.getTimeZone("Asia/Shanghai"));  // 设置北京时区
         timestamp = dateFormat.format(now);
         return timestamp;
+    }
+
+    public Exception getException() {
+        return exception;
+    }
+
+    public void setException(Exception exception) {
+        this.exception = exception;
     }
 
     @Override

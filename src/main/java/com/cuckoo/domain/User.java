@@ -6,7 +6,7 @@ public class User {
 
     private Integer id;
     private String phone;
-    private String name;
+    private String username;
     private String password;
 
     public  User() {
@@ -15,7 +15,7 @@ public class User {
 
     public User(String phone, String name, String password) {
         this.phone = phone;
-        this.name = name;
+        this.username = name;
         this.password = password;
     }
 
@@ -36,11 +36,11 @@ public class User {
     }
 
     public String getName() {
-        return name;
+        return username;
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.username = name;
     }
 
     public String getPassword() {
@@ -56,7 +56,7 @@ public class User {
         return "User{" +
                 "id=" + id +
                 ", phone='" + phone + '\'' +
-                ", name='" + name + '\'' +
+                ", name='" + username + '\'' +
                 ", password='" + password + '\'' +
                 '}';
     }
