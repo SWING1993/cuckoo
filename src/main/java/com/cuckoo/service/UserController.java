@@ -24,21 +24,23 @@ public class UserController {
         resultModel.setUrl("/user/register");
 
         if (user.getName().isEmpty() || user.getPassword().isEmpty() || user.getPhone().isEmpty()) {
-            resultModel.setMessage("用户名,密码.手机号不能为空");
+            resultModel.setMessage("用户名,密码,手机号不能为空");
+            resultModel.setCode(1001);
+            return resultModel;
+        }
+
+        if (user.getPhone().length() != 11) {
+            resultModel.setMessage("请填写正确的手机号");
+            resultModel.setCode(1001);
+        } else if (user.getPassword().length() < 6) {
+            resultModel.setMessage("密码最小六位");
             resultModel.setCode(1001);
         } else {
-            if (user.getPhone().length() != 11) {
-                resultModel.setMessage("请填写正确的手机号");
-                resultModel.setCode(1001);
-            } else if (user.getPassword().length() < 6) {
-                resultModel.setMessage("密码最小六位");
-                resultModel.setCode(1001);
-            } else {
-                user.setPassword(MD5Str.getMD5(user.getPassword()));
-                userMapper.addUser(user);
-                resultModel.setCode(1000);
-                resultModel.setMessage("注册成功");
-            }
+            String md5Password = MD5Str.getMD5(user.getPassword());
+            user.setPassword(md5Password);
+            userMapper.addUser(user);
+            resultModel.setCode(1000);
+            resultModel.setMessage("注册成功");
         }
         return resultModel;
     }
