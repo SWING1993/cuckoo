@@ -2,8 +2,9 @@ package com.cuckoo.service;
 
 import com.cuckoo.domain.User;
 import com.cuckoo.domain.UserMapper;
-import com.cuckoo.utils.MD5Str;
 import com.cuckoo.utils.ResultModel;
+import org.apache.shiro.crypto.hash.SimpleHash;
+import org.apache.shiro.util.ByteSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,21 +24,27 @@ public class UserController {
         ResultModel resultModel = new ResultModel();
         resultModel.setUrl("/user/register");
 
-        if (user.getName().isEmpty() || user.getPassword().isEmpty() || user.getPhone().isEmpty()) {
+        if (user.getUsername().isEmpty() || user.getPassword().isEmpty() || user.getPhone().isEmpty()) {
             resultModel.setMessage("用户名,密码,手机号不能为空");
             resultModel.setCode(1001);
             return resultModel;
         }
 
-        if (user.getPhone().length() != 11) {
+        if (user.getPhone().length() <= 0) {
             resultModel.setMessage("请填写正确的手机号");
             resultModel.setCode(1001);
         } else if (user.getPassword().length() < 6) {
             resultModel.setMessage("密码最小六位");
             resultModel.setCode(1001);
         } else {
-            String md5Password = MD5Str.getMD5(user.getPassword());
-            user.setPassword(md5Password);
+
+            String hashAlgorithmName = "MD5";
+            String credentials = user.getPassword();
+            int hashIterations = 1024;
+            ByteSource credentialsSalt = ByteSource.Util.bytes("password");
+            Object passwordMd5 = new SimpleHash(hashAlgorithmName, credentials, credentialsSalt, hashIterations);
+
+            user.setPassword(passwordMd5.toString());
             userMapper.addUser(user);
             resultModel.setCode(1000);
             resultModel.setMessage("注册成功");
@@ -63,7 +70,6 @@ public class UserController {
         return resultModel;
     }
 
-
     // 查询全部
     @RequestMapping(value = "/getAll", method = RequestMethod.GET)
     public List<User> getUserList() {
@@ -71,7 +77,6 @@ public class UserController {
         System.out.println(r);
         return r;
     }
-
 
     //根据id查询用户
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)

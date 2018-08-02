@@ -9,7 +9,7 @@ public class User {
     private String username;
     private String password;
 
-    public  User() {
+    public User() {
 
     }
 
@@ -35,12 +35,12 @@ public class User {
         this.phone = phone;
     }
 
-    public String getName() {
+    public String getUsername() {
         return username;
     }
 
-    public void setName(String name) {
-        this.username = name;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getPassword() {
@@ -56,7 +56,7 @@ public class User {
         return "User{" +
                 "id=" + id +
                 ", phone='" + phone + '\'' +
-                ", name='" + username + '\'' +
+                ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 '}';
     }
