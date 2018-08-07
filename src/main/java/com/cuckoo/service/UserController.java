@@ -8,57 +8,67 @@ import org.apache.shiro.crypto.hash.SimpleHash;
 import org.apache.shiro.util.ByteSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.*;
 
 @RestController
 @RequestMapping(value="/user")
 public class UserController {
-    static Map<Long, User> users= Collections.synchronizedMap(new HashMap<Long, User>());
 
-    @Autowired
     private UserMapper userMapper;
 
-    // 注册用户
+    public UserMapper getUserMapper() {
+        return userMapper;
+    }
+
+    @Autowired
+    public void setUserMapper(UserMapper userMapper) {
+        this.userMapper = userMapper;
+    }
+
+    // 用户注册
     @RequestMapping(value= "/register", method=RequestMethod.POST)
     public RestResult<User> addUser(@ModelAttribute User user) throws Exception {
 
+        user.setCreated(new Date());
+        user.setUpdated(new Date());
+
+        // 加密密码
         String hashAlgorithmName = "MD5";
         String credentials = user.getPassword();
         int hashIterations = 1024;
-        ByteSource credentialsSalt = ByteSource.Util.bytes("password");
+        // 用户名作为盐
+        ByteSource credentialsSalt = ByteSource.Util.bytes(user.getUsername());
         Object passwordMd5 = new SimpleHash(hashAlgorithmName, credentials, credentialsSalt, hashIterations);
-
         user.setPassword(passwordMd5.toString());
+
         userMapper.addUser(user);
         return RestResultGenerator.genSuccessResult();
+    }
 
+    // 用户登录
+    @RequestMapping(value= "/login", method=RequestMethod.POST)
+    public RestResult<User> loginByUsername(@RequestParam HashMap requestMap) throws Exception {
+        System.out.println("用户名登录" +requestMap);
+        String username = requestMap.get("username").toString();
+        String password = requestMap.get("password").toString();
 
-//        if (user.getUsername().isEmpty() || user.getPassword().isEmpty() || user.getPhone().isEmpty()) {
-//            resultModel.setMessage("用户名,密码,手机号不能为空");
-//            resultModel.setCode(1001);
-//            return resultModel;
-//        }
-//
-//        if (user.getPhone().length() <= 0) {
-//            resultModel.setMessage("请填写正确的手机号");
-//            resultModel.setCode(1001);
-//        } else if (user.getPassword().length() < 6) {
-//            resultModel.setMessage("密码最小六位");
-//            resultModel.setCode(1001);
-//        } else {
-//            String hashAlgorithmName = "MD5";
-//            String credentials = user.getPassword();
-//            int hashIterations = 1024;
-//            ByteSource credentialsSalt = ByteSource.Util.bytes("password");
-//            Object passwordMd5 = new SimpleHash(hashAlgorithmName, credentials, credentialsSalt, hashIterations);
-//
-//            user.setPassword(passwordMd5.toString());
-//            userMapper.addUser(user);
-//            resultModel.setCode(1000);
-//            resultModel.setMessage("注册成功");
-//        }
-//        return resultModel;
+        User user = userMapper.getUserByUsername(username);
+
+        if (user == null) {
+            return RestResultGenerator.genErrorResult("用户不存在");
+        }
+
+        // 加密密码
+        String hashAlgorithmName = "MD5";
+        String credentials = password;
+        int hashIterations = 1024;
+        // 用户名作为盐
+        ByteSource credentialsSalt = ByteSource.Util.bytes(username);
+        Object passwordMd5 = new SimpleHash(hashAlgorithmName, credentials, credentialsSalt, hashIterations);
+        if (!user.getPassword().equals(passwordMd5.toString())) {
+            return RestResultGenerator.genErrorResult("用户密码不正确");
+        }
+        return RestResultGenerator.genSuccessResult(user);
     }
 
     // 注销用户
@@ -74,8 +84,14 @@ public class UserController {
     @RequestMapping(value = "/getAll", method = RequestMethod.GET)
     public RestResult<List<User>> getUserList() throws Exception {
         List<User> r = userMapper.getAllUsers();
-        System.out.println(r);
-        return RestResultGenerator.genSuccessResult(r);
+        List<User> allUsers = new ArrayList<User>();
+        for (int i = 0; i < r.size(); i ++) {
+            User user = r.get(i);
+            user.setPassword(null);
+            allUsers.add(user);
+        }
+        System.out.println(allUsers);
+        return RestResultGenerator.genSuccessResult(allUsers);
     }
 
     //根据id查询用户

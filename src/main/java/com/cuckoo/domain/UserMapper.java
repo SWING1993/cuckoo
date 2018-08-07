@@ -10,7 +10,7 @@ import java.util.List;
 @Mapper
 public interface UserMapper {
 
-    @Insert("INSERT INTO users (username,password,phone) VALUES (#{username},#{password},#{phone})")
+    @Insert("INSERT INTO users (username,password,phone,created,updated) VALUES (#{username},#{password},#{phone},#{created},#{updated})")
     void addUser(User user);
 
     @Delete("DELETE FROM users WHERE id = #{id}")
@@ -24,5 +24,8 @@ public interface UserMapper {
 
     @Select("SELECT * FROM users WHERE phone = #{phone}")
     User getUserByPhone(String phone);
+
+    @Select("SELECT * FROM users WHERE username = #{username}")
+    User getUserByUsername(String username);
 
 }
