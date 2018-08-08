@@ -6,6 +6,7 @@ public class Feed {
     private long id;
     private long uid;
     private String author;
+    private String avatar;
     private String content;
     private Date created;
     private Date updated;
@@ -32,6 +33,14 @@ public class Feed {
 
     public void setAuthor(String author) {
         this.author = author;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 
     public String getContent() {

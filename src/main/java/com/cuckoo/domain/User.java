@@ -1,6 +1,5 @@
 package com.cuckoo.domain;
 
-import java.security.PrivateKey;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -15,6 +14,10 @@ public class User {
     private String username;
     // 用户密码
     private String password;
+    // 用户昵称
+    private String nickname;
+    // 用户头像
+    private String avatar;
     // 用户状态
     private byte state;
     // 创建时间
@@ -66,6 +69,22 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nicename) {
+        this.nickname = nicename;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 
     public byte getState() {

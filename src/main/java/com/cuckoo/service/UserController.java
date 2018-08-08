@@ -71,7 +71,7 @@ public class UserController {
     // 注销用户
     @RequestMapping(value= "/delete", method=RequestMethod.POST)
     public RestResult<User> deleteUserById(@RequestParam HashMap requestMap) throws Exception {
-        Integer id = Integer.parseInt(requestMap.get("id").toString());
+        Long id = Long.parseLong(requestMap.get("id").toString());
         userMapper.deleteUserById(id);
         return RestResultGenerator.genSuccessResult();
     }
@@ -92,7 +92,7 @@ public class UserController {
 
     //根据id查询用户
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    public RestResult<User> getUserById(@PathVariable Integer id) throws Exception {
+    public RestResult<User> getUserById(@PathVariable Long id) throws Exception {
         User user = userMapper.getUserById(id);
         return RestResultGenerator.genSuccessResult(user);
     }
@@ -100,7 +100,7 @@ public class UserController {
     // 修改头像
     @RequestMapping(value= "/upadteAvatar", method=RequestMethod.POST)
     public RestResult<User> upadteAvatar(@RequestParam HashMap requestMap) throws Exception {
-        Integer id = Integer.parseInt(requestMap.get("id").toString());
+        Long id = Long.parseLong(requestMap.get("id").toString());
         String avatar = requestMap.get("avatar").toString();
         userMapper.updateAvatarById(id,avatar);
         return RestResultGenerator.genSuccessResult();

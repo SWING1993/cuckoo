@@ -2,12 +2,13 @@ package com.cuckoo.service;
 
 import com.cuckoo.domain.Feed;
 import com.cuckoo.domain.FeedMapper;
+import com.cuckoo.domain.User;
+import com.cuckoo.domain.UserMapper;
 import com.cuckoo.utils.RestResult;
 import com.cuckoo.utils.RestResultGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -26,35 +27,56 @@ public class FeedController {
         this.feedMapper = feedMapper;
     }
 
+    private UserMapper userMapper;
+
+    public UserMapper getUserMapper() {
+        return userMapper;
+    }
+
+    @Autowired
+    public void setUserMapper(UserMapper userMapper) {
+        this.userMapper = userMapper;
+    }
+
+    // 添加Feed
     @RequestMapping(value = "/add",method= RequestMethod.POST)
     public RestResult<Feed> addFeed(@ModelAttribute Feed feed) throws Exception {
-        feed.setCreated(new Date());
+        long uid = feed.getUid();
+        User user = userMapper.getUserById(uid);
+        if (user == null) {
+            return RestResultGenerator.genErrorResult("该用户不存在");
+        }
+        feed.setAuthor(user.getNickname());
+        feed.setAvatar(user.getAvatar());
         feedMapper.addFeed(feed);
         return RestResultGenerator.genSuccessResult();
     }
 
+    // 删除Feed
     @RequestMapping(value = "/delete",method= RequestMethod.POST)
     public RestResult<Feed> delete(@RequestParam HashMap requestMap) throws Exception {
-        Integer id = Integer.parseInt(requestMap.get("id").toString());
+        Long id = Long.parseLong(requestMap.get("id").toString());
         feedMapper.deleteFeedById(id);
         return RestResultGenerator.genSuccessResult();
     }
 
+    // 根据Id查询Feed
     @RequestMapping(value = "/getById",method= RequestMethod.POST)
     public RestResult<Feed> getById(@RequestParam HashMap requestMap) throws Exception {
-        Integer id = Integer.parseInt(requestMap.get("id").toString());
+        Long id = Long.parseLong(requestMap.get("id").toString());
         Feed feed = feedMapper.getFeedById(id);
         return RestResultGenerator.genSuccessResult(feed);
     }
 
+    // 查询用户所有的Feed(byUid)
     @RequestMapping(value = "/getByUid",method= RequestMethod.POST)
     public RestResult<List<Feed>> getByUid(@RequestParam HashMap requestMap) throws Exception {
-        Integer uid = Integer.parseInt(requestMap.get("uid").toString());
+        Long uid = Long.parseLong(requestMap.get("uid").toString());
         List<Feed> feeds = feedMapper.getFeedByUid(uid);
         return RestResultGenerator.genSuccessResult(feeds);
     }
 
-
+    // 查询所有Feed
     @RequestMapping(value = "/getAll",method= RequestMethod.POST)
     public RestResult<List<Feed>> getAll() throws Exception {
         List<Feed> feeds = feedMapper.getAllFeeds();

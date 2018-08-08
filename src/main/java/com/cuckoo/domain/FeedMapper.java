@@ -10,19 +10,19 @@ import java.util.List;
 @Mapper
 public interface FeedMapper {
 
-    @Insert("INSERT INTO feed_table (uid,author,content,created) VALUES (#{uid},#{author},#{content},#{created})")
+    @Insert("INSERT INTO feed_table (uid,author,avatar,content,created) VALUES (#{uid},#{avatar},#{author},#{content},NOW())")
     void addFeed(Feed feed);
 
     @Delete("DELETE FROM feed_table WHERE id = #{id}")
-    void deleteFeedById(Integer id);
+    void deleteFeedById(Long id);
 
     @Select("SELECT * FROM feed_table")
     List<Feed> getAllFeeds();
 
     @Select("SELECT * FROM feed_table WHERE id = #{id}")
-    Feed getFeedById(Integer id);
+    Feed getFeedById(Long id);
 
     @Select("SELECT * FROM feed_table WHERE uid = #{uid}")
-    List<Feed> getFeedByUid(Integer uid);
+    List<Feed> getFeedByUid(Long uid);
 
 }
