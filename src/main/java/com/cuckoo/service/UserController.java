@@ -29,9 +29,6 @@ public class UserController {
     @RequestMapping(value= "/register", method=RequestMethod.POST)
     public RestResult<User> addUser(@ModelAttribute User user) throws Exception {
 
-        user.setCreated(new Date());
-        user.setUpdated(new Date());
-
         // 加密密码
         String hashAlgorithmName = "MD5";
         String credentials = user.getPassword();
@@ -74,7 +71,6 @@ public class UserController {
     // 注销用户
     @RequestMapping(value= "/delete", method=RequestMethod.POST)
     public RestResult<User> deleteUserById(@RequestParam HashMap requestMap) throws Exception {
-        System.out.println("注销用户" +requestMap);
         Integer id = Integer.parseInt(requestMap.get("id").toString());
         userMapper.deleteUserById(id);
         return RestResultGenerator.genSuccessResult();
@@ -97,9 +93,17 @@ public class UserController {
     //根据id查询用户
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public RestResult<User> getUserById(@PathVariable Integer id) throws Exception {
-        System.out.println(id);
         User user = userMapper.getUserById(id);
         return RestResultGenerator.genSuccessResult(user);
+    }
+
+    // 修改头像
+    @RequestMapping(value= "/upadteAvatar", method=RequestMethod.POST)
+    public RestResult<User> upadteAvatar(@RequestParam HashMap requestMap) throws Exception {
+        Integer id = Integer.parseInt(requestMap.get("id").toString());
+        String avatar = requestMap.get("avatar").toString();
+        userMapper.updateAvatarById(id,avatar);
+        return RestResultGenerator.genSuccessResult();
     }
 
 }
