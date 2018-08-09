@@ -43,7 +43,7 @@ public class UserController {
     }
 
     // 用户登录
-    @RequestMapping(value= "/login", method=RequestMethod.POST)
+    @RequestMapping(value= "/login", method=RequestMethod.POST, produces="application/json;charset=UTF-8")
     public RestResult<User> loginByUsername(@RequestParam HashMap requestMap) throws Exception {
         System.out.println("用户名登录" +requestMap);
         String username = requestMap.get("username").toString();
