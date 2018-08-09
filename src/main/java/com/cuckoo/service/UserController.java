@@ -4,8 +4,6 @@ import com.cuckoo.domain.User;
 import com.cuckoo.domain.UserMapper;
 import com.cuckoo.utils.RestResult;
 import com.cuckoo.utils.RestResultGenerator;
-import org.apache.shiro.crypto.hash.SimpleHash;
-import org.apache.shiro.util.ByteSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import java.util.*;
@@ -28,16 +26,6 @@ public class UserController {
     // 用户注册
     @RequestMapping(value= "/register", method=RequestMethod.POST)
     public RestResult<User> addUser(@ModelAttribute User user) throws Exception {
-
-        // 加密密码
-        String hashAlgorithmName = "MD5";
-        String credentials = user.getPassword();
-        int hashIterations = 1024;
-        // 用户名作为盐
-        ByteSource credentialsSalt = ByteSource.Util.bytes(user.getUsername());
-        Object passwordMd5 = new SimpleHash(hashAlgorithmName, credentials, credentialsSalt, hashIterations);
-        user.setPassword(passwordMd5.toString());
-
         userMapper.addUser(user);
         return RestResultGenerator.genSuccessResult();
     }
@@ -54,15 +42,7 @@ public class UserController {
         if (user == null) {
             return RestResultGenerator.genErrorResult("用户不存在");
         }
-
-        // 加密密码
-        String hashAlgorithmName = "MD5";
-        String credentials = password;
-        int hashIterations = 1024;
-        // 用户名作为盐
-        ByteSource credentialsSalt = ByteSource.Util.bytes(username);
-        Object passwordMd5 = new SimpleHash(hashAlgorithmName, credentials, credentialsSalt, hashIterations);
-        if (!user.getPassword().equals(passwordMd5.toString())) {
+        if (!user.getPassword().equals(password)) {
             return RestResultGenerator.genErrorResult("用户密码不正确");
         }
         return RestResultGenerator.genSuccessResult(user);
