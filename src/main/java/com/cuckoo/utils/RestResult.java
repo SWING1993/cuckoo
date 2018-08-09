@@ -2,20 +2,20 @@ package com.cuckoo.utils;
 
 public class RestResult<T> {
 
-    private boolean result;
+    private boolean success;
     private String message;
-    private T data;
+    private T result;
 
     public static <T> RestResult newInstance() {
         return new RestResult<>();
     }
 
-    public boolean isResult() {
-        return result;
+    public boolean isSuccess() {
+        return success;
     }
 
-    public void setResult(boolean result) {
-        this.result = result;
+    public void setSuccess(boolean result) {
+        this.success = result;
     }
 
     public String getMessage() {
@@ -26,20 +26,20 @@ public class RestResult<T> {
         this.message = message;
     }
 
-    public T getData() {
-        return data;
+    public T getResult() {
+        return result;
     }
 
-    public void setData(T data) {
-        this.data = data;
+    public void setResult(T data) {
+        this.result = data;
     }
 
     @Override
     public String toString() {
         return "RestResult{" +
-                "result=" + result +
+                "success=" + success +
                 ", message='" + message + '\'' +
-                ", data=" + data +
+                ", result=" + result +
                 '}';
     }
 }

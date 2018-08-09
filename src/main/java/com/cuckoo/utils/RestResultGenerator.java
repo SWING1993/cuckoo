@@ -18,8 +18,8 @@ public class RestResultGenerator {
      */
     public static <T> RestResult<T> genResult(boolean success, T data, String message) {
         RestResult<T> result = RestResult.newInstance();
-        result.setResult(success);
-        result.setData(data);
+        result.setSuccess(success);
+        result.setResult(data);
         result.setMessage(message);
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("generate rest result:{}",result);
