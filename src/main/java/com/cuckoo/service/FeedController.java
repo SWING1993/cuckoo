@@ -39,7 +39,7 @@ public class FeedController {
     }
 
     // 添加Feed
-    @RequestMapping(value = "/add",method= RequestMethod.POST)
+    @PostMapping(value = "/add")
     public RestResult<Feed> addFeed(@ModelAttribute Feed feed) throws Exception {
         long uid = feed.getUid();
         User user = userMapper.getUserById(uid);
@@ -53,7 +53,7 @@ public class FeedController {
     }
 
     // 删除Feed
-    @RequestMapping(value = "/delete",method= RequestMethod.POST)
+    @DeleteMapping(value = "/delete")
     public RestResult<Feed> delete(@RequestParam HashMap requestMap) throws Exception {
         Long id = Long.parseLong(requestMap.get("id").toString());
         feedMapper.deleteFeedById(id);
@@ -61,15 +61,15 @@ public class FeedController {
     }
 
     // 根据Id查询Feed
-    @RequestMapping(value = "/getById",method= RequestMethod.POST)
+    @PostMapping(value = "/getById")
     public RestResult<Feed> getById(@RequestParam HashMap requestMap) throws Exception {
         Long id = Long.parseLong(requestMap.get("id").toString());
         Feed feed = feedMapper.getFeedById(id);
         return RestResultGenerator.genSuccessResult(feed);
     }
 
-    // 查询用户所有的Feed(byUid)
-    @RequestMapping(value = "/getByUid",method= RequestMethod.POST)
+    // 查询用户所有的Feed
+    @PostMapping(value = "/getByUid")
     public RestResult<List<Feed>> getByUid(@RequestParam HashMap requestMap) throws Exception {
         Long uid = Long.parseLong(requestMap.get("uid").toString());
         List<Feed> feeds = feedMapper.getFeedByUid(uid);
@@ -77,10 +77,9 @@ public class FeedController {
     }
 
     // 查询所有Feed
-    @RequestMapping(value = "/getAll",method= RequestMethod.POST)
+    @GetMapping(value = "/getAll")
     public RestResult<List<Feed>> getAll() throws Exception {
         List<Feed> feeds = feedMapper.getAllFeeds();
         return RestResultGenerator.genSuccessResult(feeds);
     }
-
 }
