@@ -8,6 +8,7 @@ public class Feed {
     private String author;
     private String avatar;
     private String content;
+    private String imageUrls;
     private Date created;
     private Date updated;
 
@@ -49,6 +50,14 @@ public class Feed {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public String getImageUrls() {
+        return imageUrls;
+    }
+
+    public void setImageUrls(String imageUrls) {
+        this.imageUrls = imageUrls;
     }
 
     public Date getCreated() {
