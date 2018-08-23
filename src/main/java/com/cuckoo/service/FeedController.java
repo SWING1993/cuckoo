@@ -9,6 +9,7 @@ import com.cuckoo.utils.RestResultGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -75,6 +76,7 @@ public class FeedController {
     public RestResult<List<Feed>> getByUid(@RequestParam HashMap requestMap) throws Exception {
         Long uid = Long.parseLong(requestMap.get("uid").toString());
         List<Feed> feeds = feedMapper.getFeedByUid(uid);
+        Collections.reverse(feeds);
         return RestResultGenerator.genSuccessResult(feeds);
     }
 
@@ -82,6 +84,7 @@ public class FeedController {
     @GetMapping(value = "/getAll")
     public RestResult<List<Feed>> getAll() throws Exception {
         List<Feed> feeds = feedMapper.getAllFeeds();
+        Collections.reverse(feeds);
         return RestResultGenerator.genSuccessResult(feeds);
     }
 }

@@ -10,7 +10,7 @@ import java.util.List;
 @Mapper
 public interface FeedMapper {
 
-    @Insert("INSERT INTO feed_table (uid,author,avatar,content,imageUrls,created) VALUES (#{uid},#{avatar},#{author},#{content},#{imageUrls},#{created})")
+    @Insert("INSERT INTO feed_table (uid,author,avatar,content,imageUrls,created) VALUES (#{uid},#{author},#{avatar},#{content},#{imageUrls},#{created})")
     void addFeed(Feed feed);
 
     @Delete("DELETE FROM feed_table WHERE id = #{id}")

@@ -72,8 +72,9 @@ public class UserController {
     }
 
     //根据id查询用户
-    @GetMapping(value = "/{id}")
-    public RestResult<User> getUserById(@PathVariable Long id) throws Exception {
+    @GetMapping(value = "/getById")
+    public RestResult<User> getUserById(@RequestParam HashMap requestMap) throws Exception {
+        Long id = Long.parseLong(requestMap.get("id").toString());
         User user = userMapper.getUserById(id);
         return RestResultGenerator.genSuccessResult(user);
     }
