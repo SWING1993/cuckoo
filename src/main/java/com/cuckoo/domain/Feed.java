@@ -9,8 +9,8 @@ public class Feed {
     private String avatar;
     private String content;
     private String imageUrls;
-    private Date created;
-    private Date updated;
+    private long created;
+    private long updated;
 
     public long getId() {
         return id;
@@ -60,19 +60,19 @@ public class Feed {
         this.imageUrls = imageUrls;
     }
 
-    public Date getCreated() {
+    public long getCreated() {
         return created;
     }
 
-    public void setCreated(Date created) {
+    public void setCreated(long created) {
         this.created = created;
     }
 
-    public Date getUpdated() {
+    public long getUpdated() {
         return updated;
     }
 
-    public void setUpdated(Date updated) {
+    public void setUpdated(long updated) {
         this.updated = updated;
     }
 

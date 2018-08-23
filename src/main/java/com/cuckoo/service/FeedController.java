@@ -9,6 +9,7 @@ import com.cuckoo.utils.RestResultGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -48,6 +49,7 @@ public class FeedController {
         }
         feed.setAuthor(user.getNickname());
         feed.setAvatar(user.getAvatar());
+        feed.setCreated(new Date().getTime());
         feedMapper.addFeed(feed);
         return RestResultGenerator.genSuccessResult();
     }
